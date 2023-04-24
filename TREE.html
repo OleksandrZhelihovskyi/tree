@@ -1,0 +1,165 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        body {
+            background-color: darkgray;
+            position: absolute;
+            width:1366px;
+            height:768px;
+        }
+
+        .bar {
+            position: absolute;
+            left: 50%;
+            top: 200px;
+            height: 2px;
+            width: 200px;
+            background-color:darkslategray;
+        }
+
+        .angleA {
+            transform-origin: 0px 50%;
+            transform: rotate(45deg);
+        }
+
+        .angleB {
+            transform-origin: 0px 50%;
+            transform: rotate(135deg);
+        }
+
+        .circle {
+            font-size: 1.1px;
+            text-align: center;
+            transform-origin: center;
+            color:darkred;
+            position: absolute;
+            left: 2px;
+            top: 2px;
+            background-color: rgb(253,172,85);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            transform: scale(0.1,0.1);
+            z-index: 3;
+        }
+
+        .finaltext {
+            font-size: 20px;
+            position: absolute;
+            left: 859px;
+            top: 59px;
+            width: 250px;
+            height: 20px;
+            font-weight:bold;
+        }
+    </style>
+</head>
+<body>
+    <script>
+
+        var g = 2;
+        var leftpos = 6;
+        var toppos = 16;
+        let angle = 22;
+        function FinalText() {
+            let a = document.createElement('p');
+            a.setAttribute("class", "finaltext");
+            a.innerHTML = "It's a binary tree, guys:)";
+            document.body.appendChild(a);
+        }
+        function circleRadius(circle, i, X, Y) {
+            circle.style.left = X + 'px';
+            circle.style.top = Y + 'px';
+            if (i == 1) {
+                const r = Math.floor(Math.random() * 255);
+                const g = Math.floor(Math.random() * 255);
+                const b = Math.floor(Math.random() * 255);
+                const rgb = 'rgb(' + r + ', ' + g + ', ' + b + ')';
+                circle.style.backgroundColor = rgb;
+                console.log(rgb);
+            }
+            if (i <= 15) {
+                i += 0.1;
+
+                circle.style.transform = 'scale(' + i + ',' + i + ')';
+                setTimeout(circleRadius, 3, circle, i);
+            } else return 0;
+
+        }
+        function Addbar(X, Y, angleleft, angleright, Leng) {
+            if (g < 9) {
+                let a = document.createElement('div');
+                let b = document.createElement('div');
+                a.style.left = X + 'px';
+                a.style.top = Y + 'px';
+                b.style.left = X + 'px';
+                b.style.top = Y + 'px';
+                a.setAttribute("class", "bar angleA");
+                b.setAttribute("class", "bar angleB");
+                document.body.appendChild(a);
+                document.body.appendChild(b);
+                a.style.transform = 'rotate(' + angleleft + 'deg)';
+                b.style.transform = 'rotate(' + angleright + 'deg)';
+                Timer(a, b, 5, angleleft + angle, angleright - angle, Leng);
+            }
+
+        }
+
+        function Timer(a, b, X, angleleft, angleright, Leng) {
+            let vart = parseInt(a.style.top.slice(0, -2));
+            if (g == 15) {
+                return false;
+            }
+
+            else {
+                if (X <= Leng) {
+                    a.style.width = X + 'px';
+                    b.style.width = X + 'px';
+                    setTimeout(Timer, 5, a, b, X + 1, angleleft, angleright, Leng);
+                }
+                else {
+                    let delta = 40;
+                    Leng -= delta;
+                    let connectorX = parseInt(a.style.left.slice(0, -2))
+                    let connectorY = parseInt(a.style.top.slice(0, -2))
+                    let circle = document.createElement('div');
+                    circle.setAttribute("class", "circle");
+                    circle.style.width = 2 + 'px';
+                    circle.style.height = 2 + 'px';
+                    circle.innerHTML = g++;
+                    document.body.appendChild(circle, 1);
+                    circleRadius(circle, 1, connectorX - (Leng + delta) * Math.sin((90 - angleleft + angle) * Math.PI / 180) - 2, connectorY + (Leng + delta) * Math.cos((90 - angleleft + angle) * Math.PI / 180) - 2);
+                    let circle2 = document.createElement('div');
+                    circle2.setAttribute("class", "circle");
+                    circle2.style.width = 2 + 'px';
+                    circle2.style.height = 2 + 'px';
+                    circle2.innerHTML = g++;
+                    document.body.appendChild(circle2, 1);
+                    if (g == 8) {
+                        let circle = document.createElement('div');
+                        circle.setAttribute("class", "circle");
+                        circle.style.width = 2 + 'px';
+                        circle.style.height = 2 + 'px';
+                        circle.innerHTML = 1;
+                        document.body.appendChild(circle, 1);
+                        circleRadius(circle, 1, 600, 25);
+                        FinalText();
+                    }
+                    circleRadius(circle2, 1, connectorX + (Leng + delta) * Math.sin((90 - 180 + angleright + angle) * Math.PI / 180) - 2, connectorY + (Leng + delta) * Math.cos((90 - 180 + angleright + angle) * Math.PI / 180) - 2);
+                    return Addbar(connectorX - ((Leng + delta) * Math.sin((90 - angleleft + angle) * Math.PI / 180)), connectorY + ((Leng + delta) * Math.cos((90 - angleleft + angle) * Math.PI / 180)), angleleft, angleright, Leng)
+                        + Addbar(connectorX + ((Leng + delta) * Math.sin((90 - 180 + angleright + angle) * Math.PI / 180)), connectorY + ((Leng + delta) * Math.cos((90 - 180 + angleright + angle) * Math.PI / 180)), angleleft, angleright, Leng);
+                }
+            }
+        }
+
+    </script>
+    <button type="button" class="btn btn-primary" style="margin-top:50px;margin-left:50px" onclick="JavaScript: Addbar(600 , 25, 30,150,320)">CLICK ME!</button>
+    <button type="button" class="btn btn-success" style="margin-top:50px;margin-left:10px" onclick="location.reload()">Restart</button>
+</body>
+</html>
